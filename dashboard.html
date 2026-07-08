@@ -4,83 +4,333 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAREER CONNECT</title>
+    <title>CareerConnect | Dashboard</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #fff5f8;
+        }
+
+        /* Navigation */
+
+        header {
+            background: #d81b60;
+            color: white;
+            padding: 15px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #ffd6e7;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: .3s;
+        }
+
+        nav a:hover {
+            color: #ffe6f0;
+        }
+
+        /* Hero */
+
+        .hero {
+            background: linear-gradient(rgba(216, 27, 96, .9), rgba(233, 30, 99, .85)),
+                url("https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1400&q=80");
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 90px 20px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            max-width: 700px;
+            margin: auto;
+            font-size: 18px;
+        }
+
+        /* Cards */
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            margin-top: 50px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+            transition: .3s;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+        }
+
+        .card h2 {
+            color: #d81b60;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            color: #555;
+            line-height: 1.7;
+        }
+
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 22px;
+            background: #d81b60;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            transition: .3s;
+        }
+
+        .button:hover {
+            background: #b0124d;
+        }
+
+        /* About */
+
+        .about {
+            margin-top: 70px;
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+        }
+
+        .about h2 {
+            color: #d81b60;
+            margin-bottom: 20px;
+        }
+
+        .about p {
+            color: #555;
+            line-height: 1.9;
+        }
+
+        /* Footer */
+
+        footer {
+            background: #d81b60;
+            color: white;
+            text-align: center;
+            padding: 25px;
+            margin-top: 60px;
+        }
+
+        footer p {
+            margin: 5px;
+        }
+
+        /* Mobile */
+
+        @media(max-width:768px) {
+
+            header {
+                flex-direction: column;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 15px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+        }
+    </style>
+
 </head>
-<style>
-    body {
-        margin: 0;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-        display: flex;
-
-    }
-
-    .navbar {
-        display: grid;
-        background-color: palevioletred;
-        width: 100%;
-        padding: 15px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        justify-content: space-between;
-        background: linear-gradient(to right);
-
-    }
-
-    .navbar a {
-        color: pink;
-        margin-right: 25px;
-        text-decoration: none;
-        text-align: center;
-        font-size: 18px;
-    }
-
-    .navbar a:hover {
-        color: beige;
-    }
-
-    .main {
-        margin-left: 220px;
-        margin-top: 50px;
-        background-color: papayawhip;
-    }
-
-    .card {
-        background-color:pink;
-        padding: 25px;
-        margin-top: 25px;
-        border-radius: 10px;
-
-    }
-</style>
 
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="container">
-            <h1>CAREER CONNECT DASHBOARD</h1>
+
+    <header>
+
+        <div class="logo">
+            Career<span>Connect</span>
         </div>
-        <a href="index.html">Index page</a>
-        <a href="employer">Employer page</a>
-        <a href="youth">Upload Details</a>
-        <a href="application portal">Application Page</a>
-        </div>
-    </nav>
+
+        <nav>
+
+            <ul>
+
+                <li><a href="index.html">Home</a></li>
+
+                <li><a href="careerconnect-available-jobs.html">Available Jobs</a></li>
+
+                <li><a href="login.html">Log In</a></li>
+
+                <li><a href="Job Seekers.html">Job Seekers</a></li>
+
+                <li><a href="Employers Corner.html">Employers Corner</a></li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <section class="hero">
+
+        <h1>Welcome to CareerConnect</h1>
+
+        <p>
+            Connecting talented job seekers with trusted employers across Uganda and beyond.
+            Your career journey begins here.
+        </p>
+
+    </section>
 
     <div class="container">
-        <h1>JOB NOTIFICATIONS</h1>
-        <p>Available Jobs will pop here</p>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h2>🏠 Home</h2>
+
+                <p>
+                    Return to the homepage to explore CareerConnect and discover opportunities that match your skills.
+                </p>
+
+                <a href="index.html" class="button">Visit</a>
+
+            </div>
+
+            <div class="card">
+
+                <h2>💼 Available Jobs</h2>
+
+                <p>
+                    Browse hundreds of vacancies from reputable companies and organisations looking for skilled
+                    professionals.
+                </p>
+
+                <a href="careerconnect-available-jobs.html" class="button">Browse Jobs</a>
+
+            </div>
+
+            <div class="card">
+
+                <h2>🔐 Log In</h2>
+
+                <p>
+                    Sign in to your account to manage applications, save jobs, and update your professional profile.
+                </p>
+
+                <a href="login.html" class="button">Log In</a>
+
+            </div>
+
+            <div class="card">
+
+                <h2>🎓 Job Seekers</h2>
+
+                <p>
+                    Create your profile, upload your CV, receive recommendations, and apply for jobs with a single
+                    click.
+                </p>
+
+                <a href="Job Seekers.html" class="button">Explore</a>
+
+            </div>
+
+            <div class="card">
+
+                <h2>🏢 Employers Corner</h2>
+
+                <p>
+                    Post vacancies, review applications, shortlist candidates, and recruit the right talent efficiently.
+                </p>
+
+                <a href="Employers Corner.html" class="button">Open</a>
+
+            </div>
+
+        </div>
+
+        <div class="about">
+
+            <h2>About CareerConnect</h2>
+
+            <p>
+
+                CareerConnect is an innovative employment platform designed to bridge the gap between job seekers and
+                employers.
+                The system provides a secure, user-friendly environment where organisations can advertise job
+                opportunities while job seekers search, apply, and monitor their applications. By simplifying
+                recruitment and improving accessibility, CareerConnect aims to contribute towards reducing unemployment
+                and connecting talent with opportunity.
+
+            </p>
+
+        </div>
+
     </div>
 
-    <div class="card">
-        <ul>
-            <li><a>POST NEW JOB HERE EMPLOYER ONLY</a></li>
-            <li><a>UPLOAD INFORMATION</a></li>
-            <li><a>APPLY FOR JOBS</a></li>
-        </ul>
+    <footer>
 
-    </div>
+        <p><strong>CareerConnect</strong></p>
 
-    <img src=https://unsplash.com/photos/a-sign-that-says-we-are-hiring-and-apply-today-B3UFXwcVbc4">
+        <p>Find Work. Build Uganda.</p>
+
+        <p>Designed & Developed by <strong>Summit Developers</strong></p>
+
+        <p>&copy; 2026 CareerConnect. All Rights Reserved.</p>
+
+    </footer>
+
 </body>
 
 </html>

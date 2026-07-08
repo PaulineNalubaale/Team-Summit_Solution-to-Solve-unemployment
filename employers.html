@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CareerConnect | Post a Job</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Segoe UI,Arial,sans-serif}
+body{background:#fff5f9;color:#333}
+header{display:flex;justify-content:space-between;align-items:center;padding:18px 8%;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08);position:sticky;top:0}
+.logo{font-size:2rem;font-weight:700;color:#e91e63}
+nav a{margin:0 14px;text-decoration:none;color:#444;font-weight:600}
+.btn{background:#e91e63;color:#fff;padding:12px 22px;border-radius:30px;text-decoration:none}
+.hero{display:flex;align-items:center;justify-content:space-between;padding:60px 8%;background:linear-gradient(135deg,#ffe4ef,#ffd2e6)}
+.hero-text{max-width:48%}
+.hero h1{font-size:3rem;color:#c2185b;margin-bottom:15px}
+.hero p{line-height:1.7;margin-bottom:20px}
+.hero img{width:430px;border-radius:25px;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.container{max-width:1100px;margin:40px auto;background:#fff;padding:35px;border-radius:18px;box-shadow:0 8px 20px rgba(0,0,0,.08)}
+.container h2{color:#d81b60;margin-bottom:20px}
+form{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.full{grid-column:1/3}
+label{font-weight:600;display:block;margin-bottom:6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px}
+textarea{min-height:120px}
+button{grid-column:1/3;padding:14px;border:none;border-radius:30px;background:#e91e63;color:#fff;font-size:1.05rem;cursor:pointer}
+button:hover{background:#c2185b}
+footer{margin-top:40px;background:#d81b60;color:#fff;text-align:center;padding:24px}
+@media(max-width:800px){
+.hero{flex-direction:column;text-align:center}
+.hero-text{max-width:100%}
+.hero img{width:100%;max-width:420px;margin-top:25px}
+form{grid-template-columns:1fr}.full,button{grid-column:1}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">CareerConnect</div>
+<nav>
+<a href="#">Home</a><a href="#">Jobs</a><a href="#">Employers</a><a href="#">Contact</a>
+</nav>
+<a class="btn" href="#">Post a Job</a>
+</header>
+
+<section class="hero">
+<div class="hero-text">
+<h1>Post a Job Opening</h1>
+<p>CareerConnect helps companies, NGOs, government institutions and individual employers connect with talented job seekers. Complete the form below to publish your vacancy.</p>
+<a class="btn" href="#jobform">Start Posting</a>
+</div>
+<img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a8?auto=format&fit=crop&w=900&q=80" alt="Employer working">
+</section>
+
+<div class="container">
+<h2 id="jobform">Employer Job Posting Form</h2>
+<form>
+<div><label>Company / Employer Name</label><input required></div>
+<div><label>Contact Person</label><input required></div>
+<div><label>Email</label><input type="email" required></div>
+<div><label>Phone</label><input></div>
+<div><label>Job Title</label><input required></div>
+<div><label>Category</label><select><option>ICT</option><option>Engineering</option><option>Finance</option><option>Health</option><option>Education</option></select></div>
+<div><label>Job Type</label><select><option>Full Time</option><option>Part Time</option><option>Contract</option><option>Internship</option></select></div>
+<div><label>Work Arrangement</label><select><option>On-site</option><option>Hybrid</option><option>Remote</option></select></div>
+<div><label>Location</label><input></div>
+<div><label>Salary Range</label><input placeholder="UGX 1,000,000 - 2,000,000"></div>
+<div><label>Vacancies</label><input type="number"></div>
+<div><label>Application Deadline</label><input type="date"></div>
+<div class="full"><label>Job Description</label><textarea></textarea></div>
+<div class="full"><label>Qualifications & Requirements</label><textarea></textarea></div>
+<div class="full"><label>Application Instructions</label><textarea></textarea></div>
+<div><label>Company Logo</label><input type="file"></div>
+<div><label>Supporting Document (optional)</label><input type="file"></div>
+<button type="submit">Publish Job Opening</button>
+</form>
+</div>
+
+<footer>
+<h3>CareerConnect</h3>
+<p>Connecting Talent with Opportunity.</p>
+<p>Developed by <strong>Summit Developers</strong> © 2026</p>
+</footer>
+</body></html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareerConnect: Available Jobs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16233D;
+    --ink-soft:#3A4A63;
+    --paper:#F5F7F2;
+    --raised:#FFFFFF;
+    --gold:#E8A33D;
+    --gold-deep:#C97F1E;
+    --green:#2F7A5C;
+    --green-soft:#E4EFE8;
+    --green-soft-line:#BFDACB;
+    --line:#DDE2DA;
+    --slate:#7C8794;
+    --red:#C1503F;
+    --red-soft:#F7E6E3;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Inter',sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Fraunces',serif; font-weight:600; letter-spacing:-0.01em; color:var(--ink); margin:0;}
+  .mono{font-family:'IBM Plex Mono',monospace; letter-spacing:0.02em;}
+  button{font-family:inherit;}
+  :focus-visible{outline:2.5px solid var(--gold-deep); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+
+  #app{min-height:100vh; display:flex; flex-direction:column;}
+  .wrap{width:100%; max-width:1000px; margin:0 auto; padding:0 24px;}
+  main{flex:1;}
+
+  nav{background:var(--ink); color:#fff; position:sticky; top:0; z-index:40;}
+  .nav-inner{display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:1000px; margin:0 auto;}
+  .logo{font-family:'Fraunces',serif; font-weight:700; font-size:22px; color:#fff; display:flex; align-items:center; gap:8px; user-select:none;}
+  .logo .dot{width:8px;height:8px;border-radius:50%;background:var(--gold); display:inline-block;}
+  .nav-links{display:flex; align-items:center; gap:8px;}
+  .nav-btn{background:none; border:1px solid rgba(255,255,255,0.22); color:#fff; padding:9px 16px; border-radius:100px; font-size:14px; font-weight:500; cursor:pointer; transition:all .15s ease;}
+  .nav-btn:hover{background:rgba(255,255,255,0.1);}
+  .nav-btn.solid{background:var(--gold); border-color:var(--gold); color:var(--ink); font-weight:600;}
+  .nav-btn.solid:hover{background:var(--gold-deep); border-color:var(--gold-deep);}
+
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:12px 22px; border-radius:100px; border:none; cursor:pointer; font-size:14.5px; font-weight:600; transition:transform .1s ease, background .15s ease;}
+  .btn:active{transform:scale(0.97);}
+  .btn-gold{background:var(--gold); color:var(--ink);}
+  .btn-gold:hover{background:var(--gold-deep);}
+  .btn-outline{background:transparent; border:1.5px solid var(--ink); color:var(--ink);}
+  .btn-outline:hover{background:var(--ink); color:#fff;}
+  .btn-sm{padding:8px 14px; font-size:13px;}
+
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:var(--green); font-weight:500; margin-bottom:14px; display:flex; align-items:center; gap:8px;}
+  .eyebrow::before{content:''; width:20px; height:1.5px; background:var(--green); display:inline-block;}
+  .hint{font-size:12.5px; color:var(--slate); margin-top:5px;}
+
+  /* jobs page */
+  .dash-head{padding:36px 0 8px;}
+  .dash-body{padding:32px 0 64px;}
+  .search-row{display:grid; grid-template-columns:2fr 1fr 1fr; gap:12px; margin-bottom:22px;}
+  @media (max-width:720px){.search-row{grid-template-columns:1fr;}}
+  input[type=text],select{
+    width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line);
+    background:var(--raised); font-family:'Inter',sans-serif; font-size:14.5px; color:var(--ink);
+  }
+  input:focus,select:focus{border-color:var(--gold-deep);}
+  .count-row{display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;}
+  .count-row .count{font-size:13.5px; color:var(--slate);}
+  .sort-select{width:auto; padding:8px 12px; font-size:13px;}
+
+  .job-card{background:var(--raised); border:1px solid var(--line); border-radius:12px; padding:22px; margin-bottom:14px; display:flex; flex-direction:column; gap:8px; transition:border-color .15s ease;}
+  .job-card:hover{border-color:var(--gold-deep);}
+  .job-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px;}
+  .job-title{font-size:17px; font-weight:700; font-family:'Fraunces',serif;}
+  .job-meta{font-size:13px; color:var(--slate); display:flex; flex-wrap:wrap; gap:10px; align-items:center;}
+  .pill{background:var(--green-soft); color:var(--green); border:1px solid var(--green-soft-line); padding:3px 11px; border-radius:100px; font-size:12px; font-weight:600;}
+  .pill.gold{background:#FCEFD9; color:var(--gold-deep); border-color:#F3DBAA;}
+  .job-desc{font-size:14px; color:var(--ink-soft);}
+  .job-actions{display:flex; gap:10px; margin-top:6px; flex-wrap:wrap; align-items:center;}
+  .posted{font-size:12px; color:var(--slate); margin-left:auto;}
+  .empty-state{text-align:center; padding:56px 24px; color:var(--slate); border:1.5px dashed var(--line); border-radius:14px;}
+  .empty-state .glyph{font-size:30px; margin-bottom:12px;}
+  .empty-state h3{font-size:17px; color:var(--ink); margin-bottom:6px;}
+  .empty-state p{font-size:14px; margin:0;}
+
+  /* modal */
+  .overlay{position:fixed; inset:0; background:rgba(22,35,61,0.55); display:flex; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; z-index:100;}
+  .modal{background:var(--raised); border-radius:16px; max-width:560px; width:100%; padding:32px; animation:pop .18s ease;}
+  @keyframes pop{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+  .modal-close{float:right; background:none; border:none; font-size:20px; cursor:pointer; color:var(--slate);}
+
+  .toast{position:fixed; bottom:26px; left:50%; transform:translateX(-50%); background:var(--ink); color:#fff; padding:13px 22px; border-radius:100px; font-size:14px; font-weight:500; z-index:200; box-shadow:0 10px 30px rgba(0,0,0,0.25);}
+  .toast.err{background:var(--red);}
+  .toast.ok{background:var(--green);}
+
+  /* accent color picker */
+  .bell-wrap{position:relative;}
+  .bell{background:none;border:none;color:#fff;cursor:pointer;font-size:18px;padding:8px;border-radius:50%;display:flex;}
+  .bell:hover{background:rgba(255,255,255,0.1);}
+  .notif-panel{
+    position:absolute; right:0; top:calc(100% + 10px); width:220px; background:var(--raised);
+    color:var(--ink); border-radius:12px; box-shadow:0 18px 40px rgba(22,35,61,0.25);
+    padding:10px; z-index:50;
+  }
+  .accent-title{font-size:12px; font-weight:700; color:var(--slate); text-transform:uppercase; letter-spacing:0.06em; padding:6px 8px 10px;}
+  .accent-row{
+    width:100%; display:flex; align-items:center; gap:10px; padding:9px 8px; border-radius:8px;
+    border:none; background:none; cursor:pointer; font-size:13.5px; font-weight:500; color:var(--ink); text-align:left;
+  }
+  .accent-row:hover{background:var(--paper);}
+  .accent-row.active{background:var(--paper); font-weight:700;}
+  .accent-row .swatch{width:16px; height:16px; border-radius:50%; border:1px solid rgba(0,0,0,0.1); flex-shrink:0;}
+  .accent-row .check{margin-left:auto; color:var(--gold-deep);}
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================= STATE ============================= */
+const state = {
+  jobs: [],
+  jobFilter: { q:'', location:'', type:'' },
+  sortBy: 'newest', // newest | oldest
+  modal: null,
+  toast: null,
+  loading: true,
+  accent: 'marigold',
+  accentOpen: false,
+};
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function now(){ return Date.now(); }
+function fmtDate(ts){
+  const d = new Date(ts);
+  return d.toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
+}
+function escapeHtml(str){
+  return String(str ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function nl2li(str){
+  return (str||'').split('\n').map(s=>s.trim()).filter(Boolean).map(s=>`<li>${escapeHtml(s)}</li>`).join('');
+}
+
+/* ============================= ACCENT COLORS ============================= */
+const ACCENTS = {
+  marigold: { label:'Marigold',    base:'#E8A33D', deep:'#C97F1E' },
+  crimson:  { label:'Crimson',     base:'#C1503F', deep:'#9E3B2C' },
+  teal:     { label:'Teal',        base:'#2A8C82', deep:'#1F6D65' },
+  violet:   { label:'Violet',      base:'#7B5EA7', deep:'#5F4585' },
+  flag:     { label:'Uganda Gold', base:'#FCD116', deep:'#D9AE00' },
+  forest:   { label:'Forest',      base:'#2F7A5C', deep:'#245E47' },
+};
+function applyAccent(name){
+  const a = ACCENTS[name] || ACCENTS.marigold;
+  document.documentElement.style.setProperty('--gold', a.base);
+  document.documentElement.style.setProperty('--gold-deep', a.deep);
+  state.accent = ACCENTS[name] ? name : 'marigold';
+}
+async function selectAccent(name){
+  applyAccent(name);
+  state.accentOpen = false;
+  render();
+  try{ await window.storage.set('careerconnect:accent', name, false); }
+  catch(e){ /* non-critical */ }
+}
+async function loadAccentPref(){
+  try{
+    const r = await window.storage.get('careerconnect:accent', false);
+    if(r && r.value) applyAccent(r.value);
+  }catch(e){ applyAccent('marigold'); }
+}
+function toggleAccentPicker(){
+  state.accentOpen = !state.accentOpen;
+  render();
+}
+
+/* ============================= STORAGE ============================= */
+async function loadJobs(){
+  try{
+    const j = await window.storage.get('careerconnect:jobs', true);
+    state.jobs = j ? JSON.parse(j.value) : [];
+  }catch(e){ state.jobs = []; }
+  state.loading = false;
+}
+async function saveJobs(){
+  try{ await window.storage.set('careerconnect:jobs', JSON.stringify(state.jobs), true); }
+  catch(e){ showToast("Couldn't save. Check your connection.", 'err'); }
+}
+
+/* ============================= SAMPLE JOBS (Uganda) ============================= */
+function sampleJobs(){
+  const day = 24*60*60*1000;
+  return [
+    {
+      id: uid(), employerId:'seed', employerName:'Cafesserie', company:'Cafesserie',
+      title:'Sales Associate', location:'Kampala, Uganda', type:'Full-time',
+      salaryMin:'450,000', salaryMax:'650,000',
+      description:'Greet customers, manage the till, and keep the shop floor looking sharp at our Acacia Mall branch. Great first step into retail.',
+      requirements:'UCE or above\nComfortable speaking English and Luganda\nAvailable to work weekends',
+      postedAt: now()-1*day, closed:false,
+    },
+    {
+      id: uid(), employerId:'seed', employerName:'SafeBoda', company:'SafeBoda',
+      title:'Delivery Dispatch Rider', location:'Kampala, Uganda', type:'Contract',
+      salaryMin:'300,000', salaryMax:'550,000',
+      description:'Pick up and deliver parcels across Kampala using our dispatch app. Fuel allowance included, flexible hours.',
+      requirements:'Valid riding permit\nOwn motorcycle\nSmartphone with mobile data',
+      postedAt: now()-2*day, closed:false,
+    },
+    {
+      id: uid(), employerId:'seed', employerName:'Lake Victoria Serena Hotel', company:'Lake Victoria Serena Hotel',
+      title:'Front Desk Officer', location:'Entebbe, Uganda', type:'Full-time',
+      salaryMin:'600,000', salaryMax:'850,000',
+      description:'Be the first face our guests see. Handle check-in, check-out, and guest requests with warmth and precision.',
+      requirements:'Diploma in Hotel Management or related field\n1+ year in hospitality preferred\nFluent English',
+      postedAt: now()-3*day, closed:false,
+    },
+    {
+      id: uid(), employerId:'seed', employerName:'Mukono Agro Ltd', company:'Mukono Agro Ltd',
+      title:'Farm Supervisor', location:'Mukono, Uganda', type:'Full-time',
+      salaryMin:'500,000', salaryMax:'750,000',
+      description:'Oversee our poultry and produce operations, manage a small team of workers, and keep records of yields and stock.',
+      requirements:'Certificate in Agriculture or 2+ years hands-on farm experience\nAble to work early mornings\nBasic record-keeping skills',
+      postedAt: now()-4*day, closed:false,
+    },
+    {
+      id: uid(), employerId:'seed', employerName:'MTN Uganda', company:'MTN Uganda',
+      title:'Customer Support Agent', location:'Kampala, Uganda', type:'Full-time',
+      salaryMin:'700,000', salaryMax:'1,000,000',
+      description:'Answer customer calls and chats about airtime, data, and mobile money, and resolve issues on the first contact.',
+      requirements:'Diploma or Degree in any field\nClear spoken English\nComfortable with computers and call center tools',
+      postedAt: now()-5*day, closed:false,
+    },
+    {
+      id: uid(), employerId:'seed', employerName:'Jumia Uganda', company:'Jumia Uganda',
+      title:'Digital Marketing Intern', location:'Kampala, Uganda', type:'Internship',
+      salaryMin:'250,000', salaryMax:'350,000',
+      description:'Support the marketing team with social media posts, campaign tracking, and content ideas for our online store.',
+      requirements:'Currently studying or recently graduated in Marketing, Communications, or IT\nActive on social media\nEager to learn analytics tools',
+      postedAt: now()-6*day, closed:false,
+    },
+    {
+      id: uid(), employerId:'seed', employerName:'Roko Construction', company:'Roko Construction',
+      title:'Site Foreman', location:'Jinja, Uganda', type:'Contract',
+      salaryMin:'800,000', salaryMax:'1,200,000',
+      description:'Supervise daily activity on a residential construction site, coordinate laborers, and report progress to the site engineer.',
+      requirements:'3+ years supervising construction sites\nAble to read basic building plans\nStrong communication with workers and engineers',
+      postedAt: now()-7*day, closed:false,
+    },
+  ];
+}
+async function seedJobsIfEmpty(){
+  if(state.jobs.length === 0){
+    state.jobs = sampleJobs();
+    await saveJobs();
+  }
+}
+
+/* ============================= TOAST ============================= */
+let toastTimer = null;
+function showToast(msg, type=''){
+  state.toast = {msg, type};
+  render();
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ state.toast=null; render(); }, 3200);
+}
+
+/* ============================= APPLY (lightweight demo) ============================= */
+function openApply(jobId){
+  state.modal = {type:'apply', jobId};
+  render();
+}
+function confirmApply(jobId){
+  const job = state.jobs.find(j=>j.id===jobId);
+  state.modal = null;
+  showToast(`Application sent for ${job ? job.title : 'the role'}. The employer will be in touch.`, 'ok');
+  render();
+}
+function closeModal(){ state.modal = null; render(); }
+
+/* ============================= RENDER: NAV ============================= */
+function renderNav(){
+  return `
+  <nav>
+    <div class="nav-inner">
+      <div class="logo"><span class="dot"></span>CareerConnect</div>
+      <div class="nav-links">
+        <div class="bell-wrap">
+          <button class="bell" onclick="toggleAccentPicker()" aria-label="Choose accent color" title="Choose accent color">🎨</button>
+          ${state.accentOpen ? `
+          <div class="notif-panel">
+            <div class="accent-title">Pick an accent color</div>
+            ${Object.entries(ACCENTS).map(([key,a])=>`
+              <button class="accent-row ${state.accent===key?'active':''}" onclick="selectAccent('${key}')">
+                <span class="swatch" style="background:${a.base};"></span>
+                <span>${a.label}</span>
+                ${state.accent===key ? '<span class="check">✓</span>' : ''}
+              </button>
+            `).join('')}
+          </div>` : ''}
+        </div>
+        <button class="nav-btn solid" onclick="showToast('Head to the CareerConnect login page to create an account and apply.');">Log in to apply</button>
+      </div>
+    </div>
+  </nav>`;
+}
+
+/* ============================= RENDER: JOBS PAGE ============================= */
+function renderJobs(){
+  const f = state.jobFilter;
+  let jobs = state.jobs.filter(j=>!j.closed);
+  if(f.q) jobs = jobs.filter(j => (j.title+j.company+j.description).toLowerCase().includes(f.q.toLowerCase()));
+  if(f.location) jobs = jobs.filter(j => j.location.toLowerCase().includes(f.location.toLowerCase()));
+  if(f.type) jobs = jobs.filter(j => j.type === f.type);
+  jobs.sort((a,b)=> state.sortBy==='oldest' ? a.postedAt-b.postedAt : b.postedAt-a.postedAt);
+
+  return `
+  <div class="wrap dash-head">
+    <div class="eyebrow">Available jobs</div>
+    <h2 style="font-size:28px;">Openings hiring right now across Uganda.</h2>
+    <p class="hint" style="font-size:14px; margin-top:8px;">Browse freely below. Create a free account to save your details and send an application.</p>
+  </div>
+  <div class="wrap dash-body">
+    <div class="search-row">
+      <input type="text" placeholder="Search by title, company, keyword" value="${escapeHtml(f.q)}" oninput="state.jobFilter.q=this.value; render();">
+      <input type="text" placeholder="Location" value="${escapeHtml(f.location)}" oninput="state.jobFilter.location=this.value; render();">
+      <select onchange="state.jobFilter.type=this.value; render();">
+        <option value="">Any type</option>
+        <option ${f.type==='Full-time'?'selected':''}>Full-time</option>
+        <option ${f.type==='Part-time'?'selected':''}>Part-time</option>
+        <option ${f.type==='Internship'?'selected':''}>Internship</option>
+        <option ${f.type==='Contract'?'selected':''}>Contract</option>
+      </select>
+    </div>
+    <div class="count-row">
+      <div class="count">${jobs.length} open role${jobs.length===1?'':'s'}</div>
+      <select class="sort-select" onchange="state.sortBy=this.value; render();">
+        <option value="newest" ${state.sortBy==='newest'?'selected':''}>Newest first</option>
+        <option value="oldest" ${state.sortBy==='oldest'?'selected':''}>Oldest first</option>
+      </select>
+    </div>
+    ${jobs.length ? jobs.map(j=>renderJobCard(j)).join('') : `
+      <div class="empty-state"><div class="glyph">🔍</div><h3>No openings match right now</h3><p>Try clearing a filter, or check back soon. New roles are posted often.</p></div>
+    `}
+  </div>`;
+}
+
+function renderJobCard(j){
+  return `
+  <div class="job-card">
+    <div class="job-top">
+      <div>
+        <div class="job-title">${escapeHtml(j.title)}</div>
+        <div class="job-meta"><span style="font-weight:600;">${escapeHtml(j.company)}</span><span>·</span><span>${escapeHtml(j.location)}</span><span>·</span><span class="pill gold">${escapeHtml(j.type)}</span>${j.salaryMin||j.salaryMax?`<span>·</span><span>${escapeHtml(j.salaryMin)}${j.salaryMax?' – '+escapeHtml(j.salaryMax):''} UGX</span>`:''}</div>
+      </div>
+    </div>
+    <p class="job-desc">${escapeHtml(j.description)}</p>
+    <div class="job-actions">
+      <button class="btn btn-outline btn-sm" onclick="state.modal={type:'job', jobId:'${j.id}'}; render();">View details</button>
+      <button class="btn btn-gold btn-sm" onclick="openApply('${j.id}')">Apply now</button>
+      <span class="posted">Posted ${fmtDate(j.postedAt)}</span>
+    </div>
+  </div>`;
+}
+
+/* ============================= MODAL ============================= */
+function overlay(inner){
+  return `<div class="overlay" onclick="if(event.target===this) closeModal();"><div class="modal">${inner}</div></div>`;
+}
+function renderModal(){
+  if(!state.modal) return '';
+  const m = state.modal;
+  const job = state.jobs.find(j=>j.id===m.jobId);
+  if(!job) return '';
+
+  if(m.type==='job'){
+    return overlay(`
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="eyebrow">${escapeHtml(job.company)}</div>
+      <h2 style="font-size:22px;">${escapeHtml(job.title)}</h2>
+      <div class="job-meta" style="margin:14px 0;"><span>${escapeHtml(job.location)}</span><span>·</span><span class="pill gold">${escapeHtml(job.type)}</span>${job.salaryMin||job.salaryMax?`<span>·</span><span>${escapeHtml(job.salaryMin)}${job.salaryMax?' to '+escapeHtml(job.salaryMax):''} UGX</span>`:''}</div>
+      <p style="white-space:pre-wrap; font-size:14.5px; color:var(--ink-soft);">${escapeHtml(job.description)}</p>
+      ${job.requirements ? `<h3 style="font-size:15px; margin:18px 0 8px;">What you'll need</h3><ul style="padding-left:20px; font-size:14.5px; color:var(--ink-soft);">${nl2li(job.requirements)}</ul>` : ''}
+      <div style="margin-top:20px;"><button class="btn btn-gold" onclick="openApply('${job.id}')">Apply now</button></div>
+    `);
+  }
+
+  if(m.type==='apply'){
+    return overlay(`
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="eyebrow">Applying to</div>
+      <h2 style="font-size:21px; margin-bottom:4px;">${escapeHtml(job.title)}</h2>
+      <p class="hint" style="margin-bottom:18px;">${escapeHtml(job.company)} · ${escapeHtml(job.location)}</p>
+      <div class="field" style="margin-bottom:18px;">
+        <label style="font-size:13px; font-weight:600; color:var(--ink-soft); display:block; margin-bottom:6px;">A note to the employer</label>
+        <textarea rows="4" style="width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid var(--line); font-family:inherit; font-size:14.5px;" placeholder="Say a little about why you'd be great for this role.">Hi, I'd love to be considered for this role. I'm reliable, a quick learner, and ready to start.</textarea>
+      </div>
+      <button class="btn btn-gold" style="width:100%;" onclick="confirmApply('${job.id}')">Send application</button>
+    `);
+  }
+  return '';
+}
+
+/* ============================= MAIN RENDER ============================= */
+function render(){
+  const app = document.getElementById('app');
+  const body = state.loading
+    ? `<div style="padding:80px; text-align:center; color:var(--slate);">Loading available jobs…</div>`
+    : renderJobs();
+
+  app.innerHTML = `
+    ${renderNav()}
+    <main>${body}</main>
+    ${renderModal()}
+    ${state.toast ? `<div class="toast ${state.toast.type}">${escapeHtml(state.toast.msg)}</div>` : ''}
+  `;
+}
+
+/* ============================= INIT ============================= */
+(async function init(){
+  render();
+  await loadJobs();
+  await seedJobsIfEmpty();
+  await loadAccentPref();
+  render();
+})();
+</script>
+</body>
+</html>
